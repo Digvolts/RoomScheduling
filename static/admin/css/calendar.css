@@ -1,0 +1,30 @@
+body{
+    background-color: #40445a;
+    color: white;
+}
+.fc-day-selected {
+    background-color: rgb(255, 0, 0) !important;
+}
+
+.clickable-event {
+    cursor: pointer;
+  }
+
+.calendar a{
+    color: white;
+    text-decoration: none;
+    
+}
+
+
+
+.fc-theme-standard .fc-list-day-cushion {
+    background-color: hsl(139.62deg 100% 10.7% / 74%);
+}
+.fc-theme-standard .fc-list-day-cushion {
+    background-color: none;
+}
+
+.fc .fc-list-event:hover td {
+    background-color: #40445a;
+}

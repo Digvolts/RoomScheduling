@@ -1,0 +1,33 @@
+
+
+body{
+    background-color: #212129;
+    color: white;
+}
+
+.box {
+    box-shadow: 0 0 10px #000000;
+    background-color: #40445a;
+    padding: 5px;
+    border-radius: 20px;
+}
+.table{
+    color: white;
+   
+}
+
+/* Gaya baris data */
+.table td, .table th{
+    padding: 8px;
+    border-top: none;
+}
+
+.table thead th{
+    border-bottom: none;
+}
+
+/* Add this to your custom CSS file or within a <style> tag in your HTML */
+.modal-content {
+    background-color: #40445a !important; /* Black background color */
+    color: #fff; /* White text color for better visibility */
+}

@@ -1,0 +1,22 @@
+<!-- templates/ruangan/tambah_ruangan.html -->
+{% extends 'base.html' %}
+
+{% block content %}
+{% load static %}
+   <link rel="stylesheet" type="text/css" href="{% static 'admin/css/addRuangan.css' %}">
+<style>
+    body{
+        background-color: black;
+    }
+</style>
+     
+<div class="container mt-5">
+    <h2>Tambah Ruangan</h2>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-success">Simpan</button>
+    </form>
+</div>
+{% endblock %}
+

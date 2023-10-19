@@ -1,0 +1,62 @@
+    {% extends "Approval/Approval_base.html" %}
+
+    {% block content %}
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'admin/css/Pemesanan.css' %}">
+
+    <div class="container p-20">
+        <div class="box mt-5 p-4">
+            <h2>Pesanan</h2>
+
+            <table class="table"> 
+                <thead>
+                    <tr>
+                        <th>Nama User</th>
+                        <th>Nama Ruangan</th>
+                        <th>Waktu Peminjaman</th>
+                        <th>Tanggal Pakai</th>
+                        <th>Alasan</th>
+                        <th>Status</th>
+                        <th>Aksi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for pesanan in pesanan_list %}
+                    <tr>
+                        <td>{{ pesanan.username.username }}</td>
+                        <td>{{ pesanan.nama_ruangan }}</td>
+                        <td>{{ pesanan.get_waktu_peminjaman_display }}</td>
+                        <td>{{ pesanan.tanggal_pakai }}</td>
+                        <td>{{ pesanan.alasan }}</td>
+                        <td>{{ pesanan.status }}</td>
+                        <td>
+                            {% if pesanan.status == "Proses" %}
+                                <form method="post" action="{% url 'approval_list' %}">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="pesanan_id" value="{{ pesanan.id }}">
+                                    <button type="submit" name="new_status" value="Approved" class="btn btn-success">Approve</button>
+                                    <button type="submit" name="new_status" value="Rejected" class="btn btn-danger">Reject</button>
+                                </form>
+                            {% endif %}
+                            {% if pesanan.status == "Approved" %}
+                            <form method="post" action="{% url 'approval_list' %}">
+                                {% csrf_token %}
+                                <input type="hidden" name="pesanan_id" value="{{ pesanan.id }}">
+                                <button type="submit" name="new_status" value="Rejected" class="btn btn-danger">Reject</button>
+                            </form>
+                            {% endif %}
+                            {% if pesanan.status == "Rejected" %}
+                            <form method="post" action="{% url 'approval_list' %}">
+                                {% csrf_token %}
+                                <input type="hidden" name="pesanan_id" value="{{ pesanan.id }}">
+                                <button type="submit" name="new_status" value="Approved" class="btn btn-success">Approve</button>
+                            </form>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    {% endblock %}

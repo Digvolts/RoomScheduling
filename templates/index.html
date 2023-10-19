@@ -1,0 +1,116 @@
+{% extends "base.html" %}
+{% block content %}
+{% load static %}
+<link rel="stylesheet" type="text/css" href="{% static 'admin/css/index.css' %}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
+
+<div class="container mt-5">
+    <div class="row mb-3">
+        <div class="col display-4 text-white m-1">List Ruangan Lantai 3</div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="row">
+        {% for ruangan in ruangan_list %}
+            <div class="col-md-4">
+                <div class="product-card">
+                    <img src="{{ ruangan.gambar.url }}" alt="{{ ruangan.nama_ruangan }}">
+                    <h3>{{ ruangan.nama_ruangan }}</h3>
+                    <p>{{ ruangan.deskripsi }}</p>
+                    <a href="#" style="display: block; " class="btn" data-toggle="modal" data-target="#pesanModal{{ ruangan.id }}">Beli</a>
+                </div>
+            </div>
+
+            <!-- Modal -->
+            <div class="modal fade" id="pesanModal{{ ruangan.id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Pesan Ruangan</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form method="post" action="{% url 'popup' %}">
+                                {% csrf_token %}
+                                <input type="hidden" name="username" value="{{ username }}">
+                                <input type="hidden" name="nama_ruangan" value="{{ ruangan.nama_ruangan }}">
+                                
+                                <div class='datepicker'>
+                                    <input type="hidden" name='tanggal_pakai' id='tanggal_pakai' class='form-control' required>
+                                    <label for='tanggal'><Strong style="font-size: 15px;">Pilih Tanggal</Strong></label>
+                                </div>
+                            
+
+                                <div class="time-selection">
+                                    <label>Waktu Peminjaman:</label><br>
+                                    <div class="radio">
+                                        <input type="radio" name="waktu_peminjaman" id="morning" value="1" required>
+                                        <label for="morning">Pagi (09:00 - 12:00)</label>
+                                    </div>
+                                    <div class="radio">
+                                        <input type="radio" name="waktu_peminjaman" id="afternoon" value="2">
+                                        <label for="afternoon">Siang (12:00 - 16:00)</label>
+                                    </div>
+                                    <div class="radio">
+                                        <input type="radio" name="waktu_peminjaman" id="evening" value="3">
+                                        <label for="evening">Sore (16:00 - 19:00)</label>
+                                    </div>
+                                </div>
+                                <!-- Field alasan -->
+                                <input type="hidden" name="alasan" id="alasan" value="-">
+                                <button type="submit" class="btn btn-primary">Submit</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+
+<!-- Include jQuery, Bootstrap, and Bootstrap Datepicker -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+
+<script>
+    $(".datepicker").datepicker({
+format: 'yyyy-mm-dd',
+    changeMonth: true,
+    changeYear: true,
+    todayHighlight: true,
+    toggleActive: true,
+    daysOfWeekHighlighted: "0,6",
+    daysOfWeekDisabled: [0, 6],
+    startDate: new Date(), 
+
+});;
+
+$(document).ready(function() {
+    $('#toggle-switch').change(function() {
+        $('#toggle-form').submit();
+    });
+        
+});
+
+$(document).ready(function() {
+    // Fungsi untuk memeriksa apakah datepicker diisi atau tidak
+    function checkDatePicker() {
+        var selectedDate = $('#tanggal_pakai').val();
+        if (!selectedDate) {
+            alert('Silakan pilih tanggal sebelum melanjutkan!');
+            return false;
+        }
+        return true;
+    }
+
+    // Tangani submit form
+    $('form').submit(function() {
+        return checkDatePicker();
+    });
+});
+</script>
+{% endblock %}

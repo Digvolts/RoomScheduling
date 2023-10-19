@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+
+{% block content %}
+{% load static %}
+<link rel="stylesheet" type="text/css" href="{% static 'admin/css/calendar.css' %}">
+<script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.9/index.global.min.js'></script>
+
+<style>
+  /* Define a CSS class to change the cursor to a pointer for clickable events */
+  .clickable-event {
+    cursor: pointer;
+  }
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    var calendarEl = document.getElementById('calendar');
+    var calendar = new FullCalendar.Calendar(calendarEl, {
+        initialView: 'dayGridMonth',
+        headerToolbar: {
+            left: 'prev,next today',
+            center: 'title',
+            right: 'dayGridMonth,timeGridWeek,timeGridDay,listMonth'
+        },
+        buttonText: {
+            today: 'Today',
+            month: 'Month',
+            week: 'Week',
+            day: 'Day',
+            list: 'List'
+        },
+        eventClick: function(info) {
+            alert('Event title: ' + info.event.title);
+        },
+        eventRender: function(info) {
+            var eventStatus = info.event.extendedProps.status;
+            var eventBackgroundColor = eventStatus === 'Approve' ? 'blue' : 'grey';
+            info.el.style.backgroundColor = eventBackgroundColor;
+        },
+        eventMouseEnter: function(info) {
+            // Add the clickable-event class when the mouse enters an event
+            info.el.classList.add('clickable-event');
+        },
+        eventMouseLeave: function(info) {
+            // Remove the clickable-event class when the mouse leaves an event
+            info.el.classList.remove('clickable-event');
+        },
+        events: [
+            // Use Django template tags to loop through your events and populate the calendar
+            {% for event in events %}
+            {% if event.status == 'Proses' or event.status == 'Approved' %}
+            {
+                title: '{{ event.nama_ruangan }} - {{ event.get_waktu_peminjaman_display }}',
+                start: '{{ event.tanggal_pakai|date:"Y-m-d" }}',
+                end: '{{ event.tanggal_pakai|date:"Y-m-d" }}',
+                status: '{{ event.status }}',
+                backgroundColor: '{% if event.status == "Proses" %}grey{% else %}blue{% endif %}'
+            },
+            {% endif %}
+            {% endfor %}
+        ]
+    });
+
+    calendar.render();
+});
+</script>
+
+<body>
+  <div class="container mt-5">
+    <strong style="font-size: 25px; color: white;">Informasi Waktu Peminjaman Ruangan</strong>
+    <div id='calendar' class="calendar mt-2"></div>
+  </div>
+</body>
+</html>
+{% endblock %}

@@ -1,0 +1,26 @@
+{% extends "Approval/Approval_base.html" %}
+{% block content %}
+{% load static %}
+<link rel="stylesheet" type="text/css" href="{% static 'admin/css/index.css' %}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
+
+<div class="container mt-5">
+    <div class="row mb-3">
+        <div class="col display-4 text-white m-1">List Ruangan Lantai 3</div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="row">
+        {% for ruangan in ruangans %}
+            <div class="col-md-4">
+                <div class="product-card">
+                    <img src="{{ ruangan.gambar.url }}" alt="{{ ruangan.nama_ruangan }}">
+                    <h3>{{ ruangan.nama_ruangan }}</h3>
+                    <p>{{ ruangan.deskripsi }}</p>
+                </div>
+            </div>
+            {% endfor %}
+    </div>
+</div>
+{% endblock %}

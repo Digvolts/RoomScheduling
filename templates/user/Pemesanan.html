@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+
+{% block content %}
+{% load static %}
+<link rel="stylesheet" type="text/css" href="{% static 'admin/css/Pemesanan.css' %}">
+
+<div class="container p-20">
+    <div class="box mt-5 p-4">
+        <h2>List Pemesanan</h2>
+        <hr>
+        <table class="table"> 
+            <thead>
+                <tr>
+                    <th>Nama User</th>
+                    <th>Nama Ruangan</th>
+                    <th>Waktu Peminjaman</th>
+                    <th>Tanggal Pakai</th>
+                    <th>Alasan</th>
+                    <th>Status</th>
+                    <th>Batal</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for pesanan in pesanan_list %}
+                    <tr>
+                        <td>{{ pesanan.username.username }}</td>  
+                        <td>{{ pesanan.nama_ruangan }}</td>
+                        <td>{{ pesanan.get_waktu_peminjaman_display }}</td>
+                        <td>{{ pesanan.tanggal_pakai }}</td>
+                        <td>{{ pesanan.alasan }}</td>
+                        <td>{{ pesanan.status }}</td>
+                        <td class="text-left">
+                            <a href="#" class="edit-icon icon-link" data-toggle="modal" data-target="#editModal" data-alasan="{{ pesanan.alasan }}" data-edit-url="{% url 'update_alasan' pesanan.id %}">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+<div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editModalLabel">Edit Alasan</h5>
+            </div>
+            <div class="modal-body">
+                <form id="editForm" action="" method="post">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="alasan">Alasan</label>
+                        <textarea class="form-control" id="alasan" name="alasan" rows="4"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="saveChanges">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% if messages %}
+    <div class="container mt-3">
+        <div class="alert alert-success" id="successMessage">
+            {% for message in messages %}
+                {{ message }}
+            {% endfor %}
+        </div>
+    </div>
+{% endif %}
+
+<script>
+    // JavaScript to show the modal when clicking the edit icon
+    $('.edit-icon').on('click', function() {
+        const alasan = $(this).data('alasan');
+        const editUrl = $(this).data('edit-url');
+        $('#alasan').val(alasan);
+        $('#editForm').attr('action', editUrl);  // Set the form action to the edit URL
+        $('#editModal').modal('show');
+    });
+
+    // JavaScript to clear the modal form when the modal is closed
+    $('#editModal').on('hidden.bs.modal', function () {
+        $('#alasan').val('');  // Clear the textarea
+        $('#editForm')[0].reset();  // Reset the form
+    });
+
+    // JavaScript to handle form submission and modal closure
+    $('#saveChanges').on('click', function() {
+        $('#editForm').submit();  // Trigger the form submission
+        $('#editModal').modal('hide');  // Close the modal
+    });
+    
+    $(document).ready(function () {
+    setTimeout(function () {
+        $('#successMessage').fadeOut('slow');
+    }, 1000);  // 1000 milliseconds = 1 second
+});
+</script>
+
+{% endblock %}

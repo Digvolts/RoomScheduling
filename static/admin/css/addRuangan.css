@@ -1,0 +1,35 @@
+h2{
+    color: white;
+}
+
+label{
+    color: white;
+}
+/* static/css/dark-theme.css */
+body {
+    background-color: #121212;
+    color: #fff;
+}
+
+.container {
+    max-width: 500px;
+    background-color: #40445a;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-control {
+    background-color: #222;
+    color: #fff;
+    border: 1px solid #555;
+}
+
+/* Ketika mouse hover di atas link */
+.nav-item a.nav-link:hover {
+    color: blue;
+}

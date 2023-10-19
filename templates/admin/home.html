@@ -1,0 +1,65 @@
+{% extends "admin/base_admin.html" %}
+
+{% block content %}
+{% load static %}
+<link rel="stylesheet" type="text/css" href="{% static 'admin/css/index.css' %}">
+
+<div class="container mt-5">
+    <div class="row mb-3">
+        <div class="col display-4 text-white m-1">List Ruangan Lantai 3</div>
+        <div class="col d-flex justify-content-end align-items-center">
+            <a href="{% url 'tambah_ruangan' %}" class="btn button1 text-white d-flex justify-content-center align-items-center" style="width: 250px; height: 40px; text-decoration: none; background-color: #53635d;">
+                Add Room
+            </a>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="row">
+        {% for ruangan in ruangan_list %}
+            <div class="col-md-4">
+                <div class="product-card">
+                    <a href="{{ ruangan.gambar.url }}" data-lightbox="ruangan-images">
+                        <img src="{{ ruangan.gambar.url }}" alt="{{ ruangan.nama_ruangan }}">
+                    </a>
+                    <div class="col">
+                        <h3>
+                            {{ ruangan.nama_ruangan }}
+                            <a href="{% url 'edit_ruangan' ruangan.id %}" class="icon-link" style="float: right;">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                        </h3>
+                    </div>
+                    <div class="col">
+                        <p>
+                            {{ ruangan.deskripsi }}
+                            <a href="{% url 'delete_ruangan' ruangan.id %}" class="icon-link" style="float: right; font-size: 20px;margin-right: 5px;">
+                                <i class="fas fa-trash-alt"></i>
+                            </a>
+                            <form action="{% url 'update_Status_Ruangan' ruangan.id %}" method="post" style="display: inline;">
+                                {% csrf_token %}
+                                <button type="submit" class="icon-button" style="font-size: 20px; margin-left: 5px;">
+                                    {% if ruangan.Status_Ruangan %}
+                                        <i class="fas fa-eye-slash"></i>  <!-- Adjust icon for hidden state -->
+                                    {% else %}
+                                        <i class="fas fa-eye"></i>  <!-- Adjust icon for visible state -->
+                                    {% endif %}
+                                </button>
+                            </form>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+<script>
+    // Initialize Lightbox
+    lightbox.option({
+        'resizeDuration': 200,
+        'wrapAround': true
+    });
+</script>
+
+{% endblock %}

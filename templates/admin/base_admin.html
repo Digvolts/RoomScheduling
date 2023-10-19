@@ -1,0 +1,58 @@
+<!-- base.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+<!-- Include Lightbox CSS -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.1/css/lightbox.min.css">
+
+<!-- Include Lightbox JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.1/js/lightbox.min.js"></script>
+
+</head>
+<style>
+    li a:hover{
+    color: #5C8374;
+  }
+
+  a{
+    color: #C8E4B2;
+  }
+</style>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark justify-content-center">
+        {% if user.is_authenticated %}
+        <ul class="nav ">
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'admin_home' %}">Home</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'admin:index' %}">Manage Akun</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'history' %}">History</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'admin_calendar_view' %}">Kalender</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'logout' %}">Logout</a>
+            </li>
+        </ul>
+        {% else %}
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'login' %}">Login</a>
+            </li>
+        </ul>
+        {% endif %}
+    </nav>
+    {% block content %}
+    {% endblock %}
+</body>
+</html>

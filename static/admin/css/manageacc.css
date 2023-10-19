@@ -1,0 +1,23 @@
+body {
+    background-color: #212129;
+
+}
+
+td,th{
+    color: white;
+}
+.table {
+    background-color: #40445a; /* Set the background color of the table to white */
+}
+
+
+.btn {
+    background-color: #53635d;
+    color: #fff;
+    border: none;
+}
+
+.btn:hover{
+    color: white !important;
+    background-color: #5C8374 !important;
+}
