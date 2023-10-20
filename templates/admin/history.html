@@ -22,6 +22,7 @@
                     <th>Nama Ruangan</th>
                     <th>Waktu Peminjaman</th>
                     <th>Tanggal Pakai</th>
+                    <th>Status</th>
                     <th>Alasan</th>
                 </tr>
             </thead>
@@ -32,6 +33,7 @@
                         <td>{{ pesanan.nama_ruangan }}</td>
                         <td>{{ pesanan.get_waktu_peminjaman_display }}</td>
                         <td>{{ pesanan.tanggal_pakai }}</td>
+                        <td>{{ pesanan.status }}</td>
                         <td>{{ pesanan.alasan }}</td>
                     </tr>
                 {% endfor %}

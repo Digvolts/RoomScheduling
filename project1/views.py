@@ -126,17 +126,17 @@ def History(request):
         ws = wb.active
 
         # Menambahkan header
-        ws.append(['Nama Pengguna', 'Nama Ruangan', 'Tanggal Pakai', 'Waktu Peminjaman', 'Alasan'])
+        ws.append(['Nama Pengguna', 'Nama Ruangan', 'Tanggal Pakai', 'Waktu Peminjaman', 'Alasan', 'Status'])
 
         # Ambil data pemesanan dengan alasan yang bukan "-"
-        pesanan_list = PemesananRuangan.objects.exclude(alasan="-")
+        pesanan_list = PemesananRuangan.objects.exclude(status="Proses")
 
         # Menambahkan data pemesanan ke file XLSX
         for pesanan in pesanan_list:
             # Mengambil nama pengguna yang sesuai dari model User (CustomUser jika digunakan)
             username = pesanan.username.username
 
-            ws.append([username, pesanan.nama_ruangan, pesanan.tanggal_pakai, pesanan.get_waktu_peminjaman_display(), pesanan.alasan])
+            ws.append([username, pesanan.nama_ruangan, pesanan.tanggal_pakai, pesanan.get_waktu_peminjaman_display(), pesanan.alasan, pesanan.status])
 
         # Menyimpan file XLSX ke respons
         wb.save(response)
@@ -145,7 +145,7 @@ def History(request):
 
     # Kode untuk menampilkan daftar pesanan jika tautan "Export" tidak ditekan
     form = PemesananRuanganForm()
-    pesanan_list = PemesananRuangan.objects.exclude(alasan="-")
+    pesanan_list = PemesananRuangan.objects.exclude(status="Proses")
     
     return render(request, 'admin/history.html', {'form': form, 'pesanan_list': pesanan_list, 'username': request.user.username})
 
