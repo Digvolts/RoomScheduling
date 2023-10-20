@@ -12,7 +12,8 @@ from .models import PemesananRuangan
 from .forms import RuanganForm
 from .forms import PemesananRuanganForm
 from django.contrib import messages
-
+from django.http import HttpResponse
+import openpyxl
 
 
 def register_view(request):
@@ -115,18 +116,36 @@ def list_pemesanan(request):
 
 @login_required
 def History(request):
-    if request.method == 'POST':
-        form = PemesananRuanganForm(request.POST)
-        if form.is_valid():
-            pesanan = form.save(commit=False)
-            pesanan.username = request.user
-            pesanan.save()
-            return redirect('admin_home')  # Ganti dengan rute yang sesuai
-    else:
-        form = PemesananRuanganForm()
-    
-    # Mengambil semua data pemesanan
-    pesanan_list = PemesananRuangan.objects.all()  # Remove the filter here
+    if 'export_xlsx' in request.GET:
+        # Jika tautan "Export to XLSX" ditekan
+        response = HttpResponse(content_type='application/ms-excel')
+        response['Content-Disposition'] = 'attachment; filename="pemesanan_ruangan.xlsx'
+
+        # Membuat file XLSX dengan openpyxl
+        wb = openpyxl.Workbook()
+        ws = wb.active
+
+        # Menambahkan header
+        ws.append(['Nama Pengguna', 'Nama Ruangan', 'Tanggal Pakai', 'Waktu Peminjaman', 'Alasan'])
+
+        # Ambil data pemesanan dengan alasan yang bukan "-"
+        pesanan_list = PemesananRuangan.objects.exclude(alasan="-")
+
+        # Menambahkan data pemesanan ke file XLSX
+        for pesanan in pesanan_list:
+            # Mengambil nama pengguna yang sesuai dari model User (CustomUser jika digunakan)
+            username = pesanan.username.username
+
+            ws.append([username, pesanan.nama_ruangan, pesanan.tanggal_pakai, pesanan.get_waktu_peminjaman_display(), pesanan.alasan])
+
+        # Menyimpan file XLSX ke respons
+        wb.save(response)
+
+        return response
+
+    # Kode untuk menampilkan daftar pesanan jika tautan "Export" tidak ditekan
+    form = PemesananRuanganForm()
+    pesanan_list = PemesananRuangan.objects.exclude(alasan="-")
     
     return render(request, 'admin/history.html', {'form': form, 'pesanan_list': pesanan_list, 'username': request.user.username})
 
